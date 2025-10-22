@@ -191,9 +191,11 @@ function Portfolio() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 700 }}>
-            RC
-          </Typography>
+          <Box sx={{ flexGrow: 1 }}>
+            <Typography variant="h6" component="div" sx={{ fontWeight: 700, float: 'left' }}>
+              RC
+            </Typography>
+          </Box>
           <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 3 }}>
             {menuItems.map((item) => (
               <Button
@@ -233,16 +235,27 @@ function Portfolio() {
           minHeight: '100vh',
           display: 'flex',
           alignItems: 'center',
+          justifyContent: 'center',
           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
           position: 'relative',
           overflow: 'hidden'
         }}
       >
-        <Container maxWidth="lg">
+        <Container
+          maxWidth="lg"
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: '100vh',
+            px: { xs: 2, md: 0 }
+          }}
+        >
           <MotionBox
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          sx={{ textAlign: 'center', width: '100%', maxWidth: 900 }}
           >
             <Typography variant="h1" sx={{ color: 'white', fontWeight: 800, mb: 2, fontSize: { xs: '3rem', md: '5rem' } }}>
               Rafael Caballero
@@ -250,10 +263,10 @@ function Portfolio() {
             <Typography variant="h4" sx={{ color: 'rgba(255,255,255,0.9)', mb: 4, fontSize: { xs: '1.5rem', md: '2rem' } }}>
               Full Stack Developer
             </Typography>
-            <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.8)', mb: 4, maxWidth: 600 }}>
+            <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.8)', mb: 4, maxWidth: 600, mx: 'auto' }}>
               Building exceptional digital experiences with modern web technologies
             </Typography>
-            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center' }}>
               <Button variant="contained" size="large" sx={{ bgcolor: 'white', color: '#667eea', '&:hover': { bgcolor: '#f0f0f0' } }}>
                 View Projects
               </Button>
@@ -266,7 +279,7 @@ function Portfolio() {
       </Box>
 
       {/* Breadcrumbs */}
-      <Container maxWidth="lg" sx={{ mt: 3 }}>
+      {/* <Container maxWidth="lg" sx={{ mt: 3 }}>
         <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} sx={{ color: 'white' }}>
           <Link color="inherit" onClick={() => scrollToSection('home')} sx={{ cursor: 'pointer' }}>
             Home
@@ -275,7 +288,7 @@ function Portfolio() {
             {currentSection.charAt(0).toUpperCase() + currentSection.slice(1)}
           </Typography>
         </Breadcrumbs>
-      </Container>
+      </Container> */}
 
       {/* About Section */}
       <Box id="about" sx={{ py: 10, bgcolor: '#1a1a1a' }}>
@@ -289,7 +302,7 @@ function Portfolio() {
             <Typography variant="h2" sx={{ color: 'white', fontWeight: 700, mb: 6, textAlign: 'center' }}>
               About Me
             </Typography>
-            <Grid container spacing={4} alignItems="center">
+            <Grid container spacing={4} justifyContent="center" alignItems="center">
               <Grid sx={{ width: { xs: '100%', md: '33.333%' } }}>
                 <Avatar
                   sx={{
@@ -298,7 +311,7 @@ function Portfolio() {
                     margin: '0 auto',
                     border: '4px solid #667eea'
                   }}
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop"
+                  src="/assets/images/profile.jpg"
                 />
               </Grid>
               <Grid sx={{ width: { xs: '100%', md: '66.666%' } }}>
@@ -320,7 +333,7 @@ function Portfolio() {
           <Typography variant="h2" sx={{ color: 'white', fontWeight: 700, mb: 6, textAlign: 'center' }}>
             Skills & Technologies
           </Typography>
-          <Grid container spacing={4}>
+          <Grid container justifyContent="center" alignItems="center" spacing={4}>
             {skills.map((skillGroup, index) => (
               <Grid key={index} sx={{ width: { xs: '100%', md: '33.333%' } }}>
                 <MotionPaper
