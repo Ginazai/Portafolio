@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Container,
   Box,
@@ -40,10 +40,13 @@ import {
   Code as CodeIcon
 } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
+import './react-portfolio.css';
+import profileImage from './assets/images/profile.jpg';
 
 const MotionCard = motion.create(Card);
 const MotionBox = motion.create(Box);
 const MotionPaper = motion.create(Paper);
+const MotionButton = motion.create(Button);
 
 type Project = {
   id: number;
@@ -127,9 +130,26 @@ const projects: Project[] = [
 ];
 
 const skills = [
-  { category: "Frontend", items: ["React", "TypeScript", "Material-UI", "Framer Motion", "Redux"] },
-  { category: "Backend", items: ["Node.js", "Express", "MongoDB", "PostgreSQL", "REST APIs"] },
-  { category: "Tools", items: ["Git", "Docker", "AWS", "Firebase", "Jest"] }
+  { 
+    category: "Programming Languages", 
+    items: ["C", "C++", "Java", "C#", "SQL", "JavaScript", "HTML", "LaTeX", "CSS", "Python", "PHP", "Dart"] 
+  },
+  { 
+    category: "Frontend", 
+    items: ["React", "TypeScript", "Material-UI", "Framer Motion", "Redux"] 
+  },
+  { 
+    category: "Backend", 
+    items: ["Node.js", "Express", "MongoDB", "PostgreSQL", "SpringBoot"] 
+  },
+  { 
+    category: "Tools", 
+    items: ["Git", "Jira", "Docker", "Firebase", "Jest", "Pipedream", "Postman"] 
+  },
+  { 
+    category: "Soft Skills", 
+    items: ["Conflict resolution", "client support", "complex case management", "communication", "teamwork", "analytical thinking", "problem-solving", "results orientation"] 
+  }
 ];
 
 function Portfolio() {
@@ -138,6 +158,58 @@ function Portfolio() {
   const [currentSection, setCurrentSection] = useState('home');
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const theme = useTheme();
+  
+  // Framer Motion variants for staggered entrance and hover effects
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.06,
+        delayChildren: 0.03
+      }
+    }
+  } as any;
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 14 },
+    visible: { opacity: 1, y: 0 },
+    hover: { translateY: -6, scale: 1.03 }
+  } as any;
+
+  const chipHover = { scale: 1.04 };
+
+  useEffect(() => {
+    const options = {
+      threshold: [0.1, 0.3, 0.5], // Lower thresholds for better detection of larger sections
+      rootMargin: '-64px 0px -35% 0px' // Adjusted for header height and to detect sections earlier
+    };
+
+    const callback = (entries: IntersectionObserverEntry[]) => {
+      // Filter for entries that are intersecting
+      const visibleEntries = entries.filter(entry => entry.isIntersecting);
+      
+      if (visibleEntries.length > 0) {
+        // Find the entry with the highest intersection ratio
+        const mostVisible = visibleEntries.reduce((max, entry) => {
+          return (entry.intersectionRatio > max.intersectionRatio) ? entry : max;
+        });
+
+        if (mostVisible.intersectionRatio > 0.1) {
+          setCurrentSection(mostVisible.target.id);
+        }
+      }
+    };
+
+    const observer = new IntersectionObserver(callback, options);
+
+    // Observe all sections
+    const sections = document.querySelectorAll('[id="home"], [id="about"], [id="skills"], [id="projects"], [id="contact"]');
+    sections.forEach((section) => observer.observe(section));
+
+    return () => {
+      sections.forEach((section) => observer.unobserve(section));
+    };
+  }, []);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleDrawerToggle = () => {
@@ -230,17 +302,17 @@ function Portfolio() {
 
       {/* Hero Section */}
       <Box
-        id="home"
-        sx={{
-          minHeight: '100vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          position: 'relative',
-          overflow: 'hidden'
-        }}
-      >
+          id="home"
+          sx={{
+            minHeight: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            position: 'relative',
+            overflow: 'hidden'
+          }}
+        >
         <Container
           maxWidth="lg"
           sx={{
@@ -267,12 +339,35 @@ function Portfolio() {
               Building exceptional digital experiences with modern web technologies
             </Typography>
             <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center' }}>
-              <Button variant="contained" size="large" sx={{ bgcolor: 'white', color: '#667eea', '&:hover': { bgcolor: '#f0f0f0' } }}>
+              <MotionButton
+                variant="contained"
+                size="large"
+                whileHover={{ scale: 1.05, y: -4 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: 'spring', stiffness: 320, damping: 28 }}
+                sx={{
+                  bgcolor: 'white',
+                  color: '#667eea'
+                }}
+                onClick={() => scrollToSection('projects')}
+              >
                 View Projects
-              </Button>
-              <Button variant="outlined" size="large" sx={{ color: 'white', borderColor: 'white', '&:hover': { borderColor: 'white', bgcolor: 'rgba(255,255,255,0.1)' } }}>
+              </MotionButton>
+
+              <MotionButton
+                variant="outlined"
+                size="large"
+                whileHover={{ scale: 1.03, y: -3 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: 'spring', stiffness: 320, damping: 28 }}
+                sx={{
+                  color: 'white',
+                  borderColor: 'white'
+                }}
+                onClick={() => scrollToSection('contact')}
+              >
                 Contact Me
-              </Button>
+              </MotionButton>
             </Box>
           </MotionBox>
         </Container>
@@ -311,7 +406,7 @@ function Portfolio() {
                     margin: '0 auto',
                     border: '4px solid #667eea'
                   }}
-                  src="/assets/images/profile.jpg"
+                  src={profileImage}
                 />
               </Grid>
               <Grid sx={{ width: { xs: '100%', md: '66.666%' } }}>
@@ -333,24 +428,20 @@ function Portfolio() {
           <Typography variant="h2" sx={{ color: 'white', fontWeight: 700, mb: 6, textAlign: 'center' }}>
             Skills & Technologies
           </Typography>
-          <Grid container justifyContent="center" alignItems="center" spacing={4}>
+          <MotionBox variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <Grid container justifyContent="center" alignItems="center" spacing={4}>
             {skills.map((skillGroup, index) => (
               <Grid key={index} sx={{ width: { xs: '100%', md: '33.333%' } }}>
                 <MotionPaper
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
+                  variants={itemVariants}
+                  transition={{ duration: 0.32, delay: index * 0.04 }}
+                  whileHover="hover"
                   sx={{
                     p: 4,
                     bgcolor: '#1a1a1a',
                     borderRadius: 2,
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    '&:hover': {
-                      border: '1px solid #667eea',
-                      transform: 'translateY(-5px)',
-                      transition: 'all 0.3s'
-                    }
+                    border: '1px solid rgba(255,255,255,0.06)',
+                    cursor: 'default'
                   }}
                 >
                   <Typography variant="h5" sx={{ color: '#667eea', fontWeight: 600, mb: 3 }}>
@@ -358,22 +449,23 @@ function Portfolio() {
                   </Typography>
                   <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                     {skillGroup.items.map((skill, idx) => (
-                      <Chip
-                        key={idx}
-                        label={skill}
-                        sx={{
-                          bgcolor: 'rgba(102, 126, 234, 0.1)',
-                          color: 'white',
-                          border: '1px solid rgba(102, 126, 234, 0.3)',
-                          '&:hover': { bgcolor: 'rgba(102, 126, 234, 0.2)' }
-                        }}
-                      />
+                      <motion.span key={idx} style={{ display: 'inline-block' }} whileHover={chipHover}>
+                        <Chip
+                          label={skill}
+                          sx={{
+                            bgcolor: 'rgba(102, 126, 234, 0.1)',
+                            color: 'white',
+                            border: '1px solid rgba(102, 126, 234, 0.3)'
+                          }}
+                        />
+                      </motion.span>
                     ))}
                   </Box>
                 </MotionPaper>
               </Grid>
             ))}
-          </Grid>
+            </Grid>
+          </MotionBox>
         </Container>
       </Box>
 
@@ -387,14 +479,17 @@ function Portfolio() {
           <Typography variant="h2" sx={{ color: 'white', fontWeight: 700, mb: 6, textAlign: 'center' }}>
             Featured Projects
           </Typography>
-          <Grid container justifyContent="center" alignItems="center" spacing={2}>
+          <MotionBox variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <Grid container justifyContent="center" alignItems="center" spacing={2}>
             {projects.map((project, index) => (
               <Grid key={project.id} sx={{ width: { xs: '100%', sm: '75%', md: '33.33333%', lg: '25%' }}}>
                 <MotionCard
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 18 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  transition={{ duration: 0.32, delay: index * 0.04 }}
                   viewport={{ once: true }}
+                  whileHover={{ scale: 1.025, y: -6 }}
+                  whileTap={{ scale: 0.98 }}
                   onMouseEnter={() => setHoveredCard(project.id)}
                   onMouseLeave={() => setHoveredCard(null)}
                   onClick={() => handleProjectClick(project)}
@@ -405,13 +500,12 @@ function Portfolio() {
                     position: 'relative',
                     overflow: 'hidden',
                     bgcolor: '#0a0a0a',
-                    border: '1px solid rgba(255,255,255,0.1)',
+                    border: '1px solid rgba(255,255,255,0.08)',
                     cursor: 'pointer',
-                    transition: 'all 0.3s',
+                    transition: 'all 0.18s',
                     '&:hover': {
-                      transform: 'translateY(-10px)',
-                      border: '1px solid #667eea',
-                      boxShadow: '0 10px 30px rgba(102, 126, 234, 0.3)'
+                      border: '1px solid rgba(102,126,234,0.9)',
+                      boxShadow: '0 14px 40px rgba(102,126,234,0.28)'
                     }
                   }}
                 >
@@ -450,34 +544,43 @@ function Portfolio() {
                   </CardActions>
                   <AnimatePresence>
                     {hoveredCard === project.id && (
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
+                      <MotionBox
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 8 }}
+                        transition={{ duration: 0.10 }}
                         style={{
                           position: 'absolute',
                           top: 0,
                           left: 0,
                           right: 0,
                           bottom: 0,
-                          background: 'rgba(102, 126, 234, 0.9)',
+                          background: 'linear-gradient(180deg, rgba(102,126,234,0.9), rgba(102,126,234,0.85))',
                           zIndex: 2,
                           display: 'flex',
+                          flexDirection: 'column',
                           alignItems: 'center',
                           justifyContent: 'center',
+                          gap: 12,
                           borderRadius: 'inherit'
                         }}
                       >
-                        <Typography variant="h6" sx={{ color: 'white', fontWeight: 600 }}>
-                          Click to view details
+                        <Typography variant="h6" sx={{ color: 'white', fontWeight: 700 }}>
+                          {project.title}
                         </Typography>
-                      </motion.div>
+                        <Box sx={{ display: 'flex', gap: 2 }}>
+                          <Button variant="outlined" sx={{ color: 'white', borderColor: 'rgba(255,255,255,0.2)' }} onClick={() => handleProjectClick(project)}>
+                            View Details
+                          </Button>
+                        </Box>
+                      </MotionBox>
                     )}
                   </AnimatePresence>
                 </MotionCard>
               </Grid>
             ))}
-          </Grid>
+            </Grid>
+          </MotionBox>
         </Container>
       </Box>
 
@@ -506,6 +609,9 @@ function Portfolio() {
                   width: 60,
                   height: 60
                 }}
+                href="https://github.com/Ginazai" 
+                rel="noreferrer"
+                target="_blank"
               >
                 <GitHubIcon fontSize="large" />
               </IconButton>
@@ -518,6 +624,9 @@ function Portfolio() {
                   width: 60,
                   height: 60
                 }}
+                href="https://www.linkedin.com/in/rafaeld-caballero"
+                rel="noreferrer"
+                target="_blank"
               >
                 <LinkedInIcon fontSize="large" />
               </IconButton>
@@ -530,6 +639,9 @@ function Portfolio() {
                   width: 60,
                   height: 60
                 }}
+                href="mailto:rafaeldc1300@gmail.com"
+                rel="noreferrer"
+                target="_blank"
               >
                 <EmailIcon fontSize="large" />
               </IconButton>
@@ -539,7 +651,13 @@ function Portfolio() {
       </Box>
 
       {/* Footer */}
-      <Box sx={{ py: 4, bgcolor: '#000', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+      <Box 
+        sx=
+        {{ 
+          py: 4, 
+          bgcolor: '#000', 
+          borderTop: '1px solid rgba(255,255,255,0.1)' 
+        }}>
         <Container maxWidth="lg">
           <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)', textAlign: 'center' }}>
             © 2025 Rafael Caballero. All rights reserved.
