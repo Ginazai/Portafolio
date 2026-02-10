@@ -42,13 +42,13 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import './react-portfolio.css';
 import profileImage from './assets/images/profile.png';
-import type { Project } from './assets/types/project';
+import type { Project } from './types.ts';
 import { projects } from './assets/data/projects';
 
-const MotionCard = motion.create(Card);
-const MotionBox = motion.create(Box);
-const MotionPaper = motion.create(Paper);
-const MotionButton = motion.create(Button);
+const MotionCard = motion(Card as any);
+const MotionBox = motion(Box as any);
+const MotionPaper = motion(Paper as any);
+const MotionButton = motion(Button as any);
 
 const skills = [
   { 
