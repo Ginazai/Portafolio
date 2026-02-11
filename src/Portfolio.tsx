@@ -43,7 +43,7 @@ function Portfolio() {
       palette: {
         mode,
         primary: { main: '#667eea' },
-        background: { default: mode === 'dark' ? '#0a0a0a' : '#ffffff' }
+        background: { default: mode === 'dark' ? '#0d0d0d' : '#ffffff' }
       }
     });
     t = responsiveFontSizes(t);
@@ -205,7 +205,7 @@ function Portfolio() {
           </Typography>
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
             {SKILLS.map((skillGroup, index) => (
-              <Box key={index} sx={{ width: { xs: '100%', md: '32%' } }}>
+              <Box key={index} sx={{ width: { xs: '100%', sm: '48%', md: '31%' } }}>
                 <MotionPaper
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -216,7 +216,11 @@ function Portfolio() {
                     bgcolor: 'background.paper',
                     borderRadius: 2,
                     border: (theme: Theme) => `1px solid ${theme.palette.divider}`,
-                    height: '100%'
+                    height: '100%',
+                    '&:hover': {
+                      border: (theme: Theme) => `1px solid ${theme.palette.primary.main}`,
+                      boxShadow: (theme: Theme) => `0 10px 30px ${theme.palette.primary.main}35`
+                    }
                   }}
                 >
                   <Typography variant="h5" sx={{ color: 'primary.main', fontWeight: 600, mb: 3 }}>

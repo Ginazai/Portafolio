@@ -41,7 +41,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ delay: index * 0.1 }}
+        transition={{ delay: index * 0.05 }}
         whileHover={{ scale: 1.02, y: -4 }}
         onClick={() => setOpen(true)}
         sx={{
@@ -53,7 +53,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
           cursor: 'pointer',
           '&:hover': {
             border: (theme: Theme) => `1px solid ${theme.palette.primary.main}`,
-            boxShadow: (theme: Theme) => `0 14px 40px ${theme.palette.primary.main}33`
+            boxShadow: (theme: Theme) => `0 14px 40px ${theme.palette.primary.main}35`
           }
         }}
       >
@@ -89,7 +89,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
         onClose={() => setOpen(false)}
         maxWidth="md"
         fullWidth
-        PaperProps={{ sx: { bgcolor: 'background.paper', backgroundImage: 'none' } }}
+        slotProps={{ paper: { sx: { bgcolor: 'background.paper', backgroundImage: 'none' } }}}
       >
         <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Typography variant="h5" sx={{ color: 'text.primary', fontWeight: 600 }}>
@@ -115,7 +115,11 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
           </Typography>
           <Grid container spacing={1} sx={{ mb: 3 }}>
             {project.features.map((feature, idx) => (
-              <Grid item xs={12} sm={6} key={idx}>
+              <Box
+                component="div"
+                key={idx}
+                sx={{ width: { xs: '100%', sm: '50%' } }}
+              >
                 <Chip
                   label={feature}
                   sx={{
@@ -126,7 +130,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
                     border: (theme: Theme) => `1px solid ${theme.palette.primary.main}`
                   }}
                 />
-              </Grid>
+              </Box>
             ))}
           </Grid>
           <Typography variant="h6" sx={{ color: 'text.primary', mb: 2 }}>

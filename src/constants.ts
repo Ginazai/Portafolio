@@ -1,6 +1,6 @@
-// Keep all your static data here - easy to update!
+import { Home as HomeIcon } from '@mui/icons-material';
 
-export const MENU_ITEMS = ['home', 'about', 'skills', 'projects', 'contact'];
+export const MENU_ITEMS = [`home`, 'about', 'skills', 'projects', 'contact'];
 
 export const SKILLS = [
   { 

@@ -29,7 +29,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         >
           <MenuIcon />
         </IconButton>
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
           <Typography variant="h6" component="div" sx={{ fontWeight: 700 }}>
             RC
           </Typography>
